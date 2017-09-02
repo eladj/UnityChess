@@ -17,7 +17,10 @@ public class Board : MonoBehaviour {
 	public GameObject bishopBlackPrefab;
 	public GameObject queenBlackPrefab;
 	public GameObject kingBlackPrefab;
-	Tile[,] tiles = new Tile[8,8];
+
+	public static int Width = 8;
+	public static int Height = 8;
+	Tile[,] tiles = new Tile[Height, Width];
 
 	void Start () {
 		CreateBoard ();
@@ -37,8 +40,9 @@ public class Board : MonoBehaviour {
 			for (var column = 0; column < 8; column++) {
 				Tile cur_tile = (Instantiate (tilePrefab) as GameObject).GetComponent<Tile> ();
 				cur_tile.transform.SetParent (tiles_child.transform, true);
-				cur_tile.name = row.ToString() + "_" + column.ToString();
-				Debug.Log ("Generate Tile: " + cur_tile.name);
+				int c = 'a' + (int)column;
+				cur_tile.name = ((char)c).ToString() + (row + 1).ToString();
+				// Debug.Log ("Generate Tile: " + cur_tile.name);
 				cur_tile.row = row;
 				cur_tile.column = column;
 				tiles [row, column] = cur_tile;
@@ -74,7 +78,12 @@ public class Board : MonoBehaviour {
 	}
 
 	public Tile GetTile(int row, int column){
-		return tiles [row, column];
+		// Debug.Log ("Get Tile: " + row.ToString () + "," + column.ToString ());
+		if (row >= 0 && row < Width && column >= 0 && column < Height) {
+			return tiles [row, column];
+		} else {
+			return null;
+		}
 	}
 
 	King InstantiateKing(GameObject prefab, Piece.ColorType color, Tile tile){
@@ -89,7 +98,7 @@ public class Board : MonoBehaviour {
 		} else if (color == Piece.ColorType.Black) {
 			piece.name = "king_black";
 		}
-		tile.piece = piece;
+		tile.SetPiece(piece);
 		return piece;
 	}
 
@@ -105,7 +114,7 @@ public class Board : MonoBehaviour {
 		} else if (color == Piece.ColorType.Black) {
 			piece.name = "queen_black";
 		}
-		tile.piece = piece;
+		tile.SetPiece(piece);
 		return piece;
 	}
 
@@ -126,7 +135,7 @@ public class Board : MonoBehaviour {
 		} else {
 			piece.name += "_1";
 		}
-		tile.piece = piece;
+		tile.SetPiece(piece);
 		return piece;
 	}
 
@@ -147,7 +156,7 @@ public class Board : MonoBehaviour {
 		} else {
 			piece.name += "_1";
 		}
-		tile.piece = piece;
+		tile.SetPiece(piece);
 		return piece;
 	}
 
@@ -168,7 +177,7 @@ public class Board : MonoBehaviour {
 		} else {
 			piece.name += "_1";
 		}
-		tile.piece = piece;
+		tile.SetPiece(piece);
 		return piece;
 	}
 
@@ -184,7 +193,7 @@ public class Board : MonoBehaviour {
 		} else if (color == Piece.ColorType.Black) {
 			piece.name = "pawn_black_" + tile.column.ToString();
 		}
-		tile.piece = piece;
+		tile.SetPiece(piece);
 		return piece;
 	}
 

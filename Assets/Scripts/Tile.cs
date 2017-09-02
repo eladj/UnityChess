@@ -6,7 +6,7 @@ public class Tile : MonoBehaviour {
 
 	public int row;
 	public int column;
-	public Piece piece;
+	private Piece piece = null;
 
 	public enum TileType {White, Black};
 	public Material whiteTileMaterial, blackTileMaterial;
@@ -19,8 +19,6 @@ public class Tile : MonoBehaviour {
 	}
 
 	void LoadTileMaterial(TileType type){
-		Debug.Log ("Loading Material");
-
 		// Load Tile material according to its type (White / Black)
 		MeshRenderer renderer = gameObject.GetComponent<MeshRenderer> ();
 		if (type == TileType.White) {
@@ -39,25 +37,34 @@ public class Tile : MonoBehaviour {
 		LoadTileMaterial (GetTileType ());
 	}
 
+	public bool HasPiece(){
+		if (piece == null) {
+			return false;
+		} else {
+			return true;
+		}
+	}
 
+	public void SetPiece(Piece newPiece){
+		piece = newPiece;
+	}
+
+	public Piece GetPiece(){
+		return piece;
+	}
+
+//	public static GameObject tilePrefab;
 //	public static Tile Create(Board board, int column, int row) {
 //		if (!tilePrefab) {
-//			if (GetTileType == TileType.White) {
-//				tilePrefab = Resources.Load<GameObject>("Prefabs/Board/TileWhite");
-//			} else if (GetTileType == TileType.Black) {
-//				tilePrefab = Resources.Load<GameObject>("Prefabs/Board/TileBlack");
-//			}
+//			tilePrefab = Resources.Load<GameObject>("Prefabs/Board/Tile");
 //		}
-//
 //		var tile = (Instantiate(tilePrefab) as GameObject).GetComponent<Tile>();
-//
-//		tile.transform.SetParent(board.transform);
-//		tile.board = board;
+//		tile.transform.SetParent(board.transform, true);
 //		tile.row = row;
 //		tile.column = column;
-//
+//		int c = 'a' + (int)row;
+//		tile.name = ((char)c).ToString() + (column + 1).ToString();
 //		return tile;
-//
 //	}
 
 }

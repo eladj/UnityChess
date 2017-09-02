@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4091346932552376}
   - component: {fileID: 33191195722209136}
   - component: {fileID: 23549670697734330}
+  - component: {fileID: 64385433337230318}
   - component: {fileID: 114540274971845694}
   m_Layer: 0
   m_Name: White Rook
@@ -80,6 +81,20 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1451150441598584}
+  m_Mesh: {fileID: 4300000, guid: 5191956bd5bb6014999f81129cf153e3, type: 3}
+--- !u!64 &64385433337230318
+MeshCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1451150441598584}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Convex: 0
+  m_InflateMesh: 0
+  m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300000, guid: 5191956bd5bb6014999f81129cf153e3, type: 3}
 --- !u!114 &114540274971845694
 MonoBehaviour:

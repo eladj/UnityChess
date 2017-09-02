@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4400772550665018}
   - component: {fileID: 33288180657257502}
   - component: {fileID: 23124421681921648}
+  - component: {fileID: 64162842740565086}
   - component: {fileID: 114987231589886442}
   m_Layer: 0
   m_Name: White Bishop
@@ -80,6 +81,20 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1332266116160360}
+  m_Mesh: {fileID: 4300000, guid: 8e406e8a50248f5499b007168c8d1ce1, type: 3}
+--- !u!64 &64162842740565086
+MeshCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1332266116160360}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Convex: 0
+  m_InflateMesh: 0
+  m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300000, guid: 8e406e8a50248f5499b007168c8d1ce1, type: 3}
 --- !u!114 &114987231589886442
 MonoBehaviour:

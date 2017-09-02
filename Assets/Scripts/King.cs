@@ -3,14 +3,36 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class King : Piece {
-	public override bool IsMoveLegal(Tile targetTile){
-		if (Mathf.Abs (targetTile.row - currentTile.row) == 1 &&
-			Mathf.Abs (targetTile.column - currentTile.column) == 1 &&
-			targetTile.row >= 0 && targetTile.row < 8 &&
-			targetTile.column >= 0 && targetTile.column < 8) {
-			return true;
-		} else {
-			return false;
+	
+	protected override void Start (){
+		base.Start ();
+		cname = 'K';
+	}
+
+//	public override bool IsMoveLegal(Tile targetTile){
+//		List<Tile> validMoves = GetValidMoves();
+//		if (validMoves.Contains(targetTile)) {
+//			return true;
+//		} else {
+//			return false;
+//		}
+//	}
+
+	public override List<Tile> GetValidMoves(){
+		List<Tile> validMoves = new List<Tile>();
+
+		for (int row = Mathf.Max (0, currentTile.row - 1);
+			row <= Mathf.Min (Board.Height - 1, currentTile.row + 1); row++) {
+			for (int col = Mathf.Max (0, currentTile.column - 1);
+				col <= Mathf.Min (Board.Width - 1, currentTile.column + 1); col++) {
+				Tile tile = board.GetTile (row, col);
+				if (!tile.HasPiece()) {  //TODO: Also check if tile is not checked
+					validMoves.Add (tile);
+				} else if (tile.GetPiece().color != this.color){
+					validMoves.Add (tile);
+				}					
+			}
 		}
+		return validMoves;
 	}
 }
