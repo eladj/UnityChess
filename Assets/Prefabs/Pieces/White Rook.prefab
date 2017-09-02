@@ -25,7 +25,7 @@ GameObject:
   - component: {fileID: 114540274971845694}
   m_Layer: 0
   m_Name: White Rook
-  m_TagString: Untagged
+  m_TagString: Piece
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -109,4 +109,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentTile: {fileID: 0}
   color: 0
+  hasMoved: 0
   visible: 1

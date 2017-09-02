@@ -53,6 +53,15 @@ public class Tile : MonoBehaviour {
 		return piece;
 	}
 
+	public void DestroyPiece(){
+		if (HasPiece ()) {
+//			GameObject obj = piece.GetComponent<GameObject> ();
+
+			Debug.Log(piece.gameObject.name);
+			Destroy (piece.gameObject);
+		}
+	}
+
 //	public static GameObject tilePrefab;
 //	public static Tile Create(Board board, int column, int row) {
 //		if (!tilePrefab) {

@@ -11,11 +11,9 @@ public class Pawn : Piece {
 	public override List<Tile> GetValidMoves(){
 		List<Tile> validMoves = new List<Tile>();
 		// Check white
-		if (this.color == ColorType.White) {
+		if (this.color == Game.SideColor.White) {
 			int nextRow = currentTile.row + 1;
-			// TODO - Check crowned pawn when reach row 8 - not here...
 			Tile nextTile = board.GetTile (nextRow, currentTile.column);
-
 			if (nextTile.GetPiece() == null) {
 				validMoves.Add (nextTile);
 			}
@@ -49,11 +47,9 @@ public class Pawn : Piece {
 		}
 
 		// Check black
-		if (this.color == ColorType.Black) {
+		if (this.color == Game.SideColor.Black) {
 			int nextRow = currentTile.row - 1;
-			// TODO - Check crowned pawn when reach row 0 - not here...
 			Tile nextTile = board.GetTile (nextRow, currentTile.column);
-
 			if (nextTile.GetPiece() == null) {
 				validMoves.Add (nextTile);
 			}

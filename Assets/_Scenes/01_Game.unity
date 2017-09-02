@@ -397,7 +397,7 @@ GameObject:
   - component: {fileID: 1921012724}
   m_Layer: 0
   m_Name: Game
-  m_TagString: Untagged
+  m_TagString: Game
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -416,6 +416,8 @@ MonoBehaviour:
   board: {fileID: 1146483869}
   player1: {fileID: 0}
   player2: {fileID: 0}
+  whiteChecked: 0
+  blackChecked: 0
 --- !u!4 &1921012725
 Transform:
   m_ObjectHideFlags: 0
