@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: fd00871b1c4a74f279eec49fa62435ba
+timeCreated: 1504337920
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Lovesauce
+  fontNames:
+  - Lovesauce
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
