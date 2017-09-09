@@ -119,16 +119,29 @@ public class Board : MonoBehaviour {
 		Gizmos.DrawWireCube (transform.position + offset, new Vector3(width, height, 0));
 	}
 
+	// Add a new Piece GameObject and corresponding PieceLogic
+	public void AddPiece(Game.PieceType pieceType, Game.SideColor pieceColor, int row, int col){
+		GameObject pieces_child = this.transform.Find("Pieces").gameObject;
+		logic.CreateNewPiece(pieceType, pieceColor, row, col);
+		pieces.Add(PieceFactory.CreatePiece(pieceType, pieceColor, pieces_child, logic.GetTile (row, col).GetPiece ()));
+	}
+
 	// Remove a piece when it has been taken by opponent
 	public void RemovePiece(TileLogic tile){
 		if (tile.HasPiece ()) {
 			Piece p = GetPiece(tile);
 			Debug.Log("Remove piece: " + p.logic.NameChar() + " at " + tile.Name());
-			tile.SetPiece (null);
-			p.logic.currentTile = null;
+			logic.RemovePiece (tile);
 			p.gameObject.SetActive (false);
-//			pieces.Remove (p);
+			pieces.Remove (p);
 //			Destroy (p.gameObject);
 		}
+	}
+
+	// Move piece from origin to destination
+	public void MovePiece(Move move){
+		logic.MovePiece (move);
+		Piece p = GetPiece(move.destination);
+		p.UpdatePosition ();
 	}
 }

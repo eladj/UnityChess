@@ -17,7 +17,7 @@ public class Rook : PieceLogic {
 		}
 
 		// Up
-		for (int row = currentTile.row + 1; row < boardHeight; row++) {
+		for (int row = currentTile.row + 1; row < BoardLogic.Height; row++) {
 			validMoves.Add(new TileLogic (row, currentTile.column));
 		}
 
@@ -27,7 +27,7 @@ public class Rook : PieceLogic {
 		}
 
 		// Right
-		for (int col = currentTile.column + 1; col < boardWidth; col++) {
+		for (int col = currentTile.column + 1; col < BoardLogic.Width; col++) {
 			validMoves.Add(new TileLogic (currentTile.row, col));
 		}
 		return validMoves;

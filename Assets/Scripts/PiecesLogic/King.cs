@@ -13,12 +13,24 @@ public class King : PieceLogic {
 
 		// Standard moves
 		for (int row = Mathf.Max (0, currentTile.row - 1);
-			row <= Mathf.Min (boardHeight - 1, currentTile.row + 1); row++) {
+			row <= Mathf.Min (BoardLogic.Height - 1, currentTile.row + 1); row++) {
 			for (int col = Mathf.Max (0, currentTile.column - 1);
-				col <= Mathf.Min (boardWidth - 1, currentTile.column + 1); col++) {
+				col <= Mathf.Min (BoardLogic.Width - 1, currentTile.column + 1); col++) {
 				validMoves.Add (new TileLogic (row, col));
 			}
 		}
+
+		// Castle
+		// IMPORTANT: These moves are also checked in the Game level, to make sure they are valid.
+		if (this.color == Game.SideColor.White && currentTile.row == 0) {
+			validMoves.Add (new TileLogic (0, 6));
+			validMoves.Add (new TileLogic (0, 2));
+		}
+		if (this.color == Game.SideColor.Black && currentTile.row == 7) {
+			validMoves.Add (new TileLogic (7, 6));
+			validMoves.Add (new TileLogic (7, 2));
+		}
+
 		return validMoves;
 	}
 }

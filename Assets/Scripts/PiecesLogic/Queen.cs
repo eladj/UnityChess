@@ -13,13 +13,13 @@ public class Queen : PieceLogic {
 
 		// Up-Left
 		for (int row = currentTile.row + 1, col = currentTile.column - 1;
-			row < boardHeight && col >= 0; row++, col--) {
+			row < BoardLogic.Height && col >= 0; row++, col--) {
 			validMoves.Add (new TileLogic (row, col));
 		}
 
 		// Up-Right
 		for (int row = currentTile.row + 1, col = currentTile.column + 1;
-			row < boardHeight && col < boardWidth; row++, col++) {
+			row < BoardLogic.Height && col < BoardLogic.Width; row++, col++) {
 			validMoves.Add (new TileLogic (row, col));
 		}
 
@@ -31,7 +31,7 @@ public class Queen : PieceLogic {
 
 		// Down-Right
 		for (int row = currentTile.row - 1, col = currentTile.column + 1;
-			row >= 0 && col < boardWidth; row--, col++) {
+			row >= 0 && col < BoardLogic.Width; row--, col++) {
 			validMoves.Add (new TileLogic (row, col));
 		}
 
@@ -41,7 +41,7 @@ public class Queen : PieceLogic {
 		}
 
 		// Up
-		for (int row = currentTile.row + 1; row < boardHeight; row++) {
+		for (int row = currentTile.row + 1; row < BoardLogic.Height; row++) {
 			validMoves.Add (new TileLogic (row, currentTile.column));
 		}
 
@@ -51,7 +51,7 @@ public class Queen : PieceLogic {
 		}
 
 		// Right
-		for (int col = currentTile.column + 1; col < boardWidth; col++) {
+		for (int col = currentTile.column + 1; col < BoardLogic.Width; col++) {
 			validMoves.Add (new TileLogic (currentTile.row, col));
 		}
 

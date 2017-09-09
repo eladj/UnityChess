@@ -8,16 +8,19 @@ public abstract class PieceLogic {
 	public Game.PieceType type;
 	public Game.SideColor color;
 	public bool hasMoved = false;	// Useful for castle in case of King and Rook
-	protected int boardWidth;
-	protected int boardHeight;
 
 	// Get all valid moves of the piece as a list of destination tiles
 	public abstract List<TileLogic> GetValidMoves();
 
 	public PieceLogic (Game.SideColor sideColor) {
-		boardWidth = BoardLogic.Width;
-		boardHeight = BoardLogic.Height;
 		color = sideColor;
+	}
+
+	public PieceLogic Copy(TileLogic _currentTile){
+		PieceLogic pieceCopy = PieceLogicFactory.CreatePiece (type, color);
+		pieceCopy.currentTile = _currentTile;
+		pieceCopy.hasMoved = hasMoved;
+		return pieceCopy;
 	}
 
 	public bool IsActive(){
@@ -26,8 +29,12 @@ public abstract class PieceLogic {
 
 	// Charcter name representation: K, Q, B, K, R, P
 	public char NameChar(){
+		return PieceLogic.NameChar (type);
+	}
+
+	public static char NameChar(Game.PieceType pieceType){
 		char c = '\0';
-		switch (type){
+		switch (pieceType){
 		case Game.PieceType.King:
 			c = 'K';
 			break;

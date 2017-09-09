@@ -5,8 +5,6 @@ using UnityEngine;
 public class TileLogic {
 	public int row;
 	public int column;
-	protected int boardWidth;
-	protected int boardHeight;
 	private PieceLogic piece = null;	// Which piece is on the tile
 
 //	public TileLogic(){
@@ -14,11 +12,17 @@ public class TileLogic {
 //		column = 0;
 //	}
 
-	public TileLogic(int _row, int _col, PieceLogic piece=null){
+	public TileLogic(int _row, int _col){
 		row = _row;
 		column = _col;
-		boardWidth = BoardLogic.Width;
-		boardHeight = BoardLogic.Height;
+	}
+
+	public TileLogic Copy(){
+		TileLogic tileCopy = new TileLogic (row, column);
+		if (piece != null) {
+			tileCopy.piece = piece.Copy(tileCopy);
+		}
+		return tileCopy;
 	}
 
 	public Game.TileType GetTileType(){
@@ -29,7 +33,7 @@ public class TileLogic {
 	}
 
 	public bool IsInBoard(){
-		if (row > 0 && row < boardHeight && column > 0 && column < boardWidth) {
+		if (row > 0 && row < BoardLogic.Height && column > 0 && column < BoardLogic.Width) {
 			return true;
 		} else {
 			return false;
@@ -42,6 +46,15 @@ public class TileLogic {
 		} else {
 			return true;
 		}
+	}
+
+	public bool HasPieceOfType(Game.PieceType pieceType, Game.SideColor pieceColor){
+		if (piece != null) {
+			if (piece.type == pieceType && piece.color == pieceColor) {
+				return true;
+			}
+		} 
+		return false;
 	}
 
 	public void SetPiece(PieceLogic newPiece){

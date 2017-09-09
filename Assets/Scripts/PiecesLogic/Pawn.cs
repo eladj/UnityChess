@@ -36,7 +36,7 @@ public class Pawn : PieceLogic {
 
 		// Check diagonal takes
 		// IMPORTANT: These move are also checked in the Game level, to make sure they
-		//            are valud.
+		//            are valid.
 		validMoves.Add (new TileLogic(nextRow, currentTile.column - 1));
 		validMoves.Add (new TileLogic(nextRow, currentTile.column + 1));
 
