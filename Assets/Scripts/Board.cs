@@ -4,237 +4,112 @@ using UnityEngine;
 
 public class Board : MonoBehaviour {
 
-	public GameObject tilePrefab;
-	public GameObject pawnWhitePrefab;
-	public GameObject rookWhitePrefab;
-	public GameObject knightWhitePrefab;
-	public GameObject bishopWhitePrefab;
-	public GameObject queenWhitePrefab;
-	public GameObject kingWhitePrefab;
-	public GameObject pawnBlackPrefab;
-	public GameObject rookBlackPrefab;
-	public GameObject knightBlackPrefab;
-	public GameObject bishopBlackPrefab;
-	public GameObject queenBlackPrefab;
-	public GameObject kingBlackPrefab;
+	// Tile GameObjects
+	// We connect each of them to the TileLogic inside BoardLogic
+	Tile[,] tiles = new Tile[BoardLogic.Height, BoardLogic.Width];
 
-	public static int Width = 8;
-	public static int Height = 8;
-	Tile[,] tiles = new Tile[Height, Width];
+	// List of all pieces GameObjects
+	private List<Piece> pieces = new List<Piece>();
+
+	// Logic
+	public BoardLogic logic;
+
+	// Graphics
+	public GameObject tilePrefab;
+	public static float z_height = 10f;
 
 	void Start () {
+		logic =  new BoardLogic ();
+		logic.InitializePieces ();
 		CreateBoard ();
 		CreatePieces ();
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
-	void CreateBoard(){
-		GameObject tiles_child = this.transform.Find("Tiles").gameObject;
-
-		//Create all the tiles for this board.
-		for (var row = 0; row < 8; row++) {
-			for (var column = 0; column < 8; column++) {
-				Tile cur_tile = (Instantiate (tilePrefab) as GameObject).GetComponent<Tile> ();
-				cur_tile.transform.SetParent (tiles_child.transform, true);
-				int c = 'a' + (int)column;
-				cur_tile.name = ((char)c).ToString() + (row + 1).ToString();
-				// Debug.Log ("Generate Tile: " + cur_tile.name);
-				cur_tile.row = row;
-				cur_tile.column = column;
-				tiles [row, column] = cur_tile;
-			}
-		}
-	}
-
-	void CreatePieces(){
-		// White pieces
-		InstantiateKing (kingWhitePrefab, Game.SideColor.White, tiles[0,4]);
-		InstantiateQueen (queenWhitePrefab, Game.SideColor.White, tiles[0,3]);
-		InstantiateBishop (bishopWhitePrefab, Game.SideColor.White, tiles[0,2]);
-		InstantiateBishop (bishopWhitePrefab, Game.SideColor.White, tiles[0,5]);
-		InstantiateKnight (knightWhitePrefab, Game.SideColor.White, tiles[0,1]);
-		InstantiateKnight (knightWhitePrefab, Game.SideColor.White, tiles[0,6]);
-		InstantiateRook (rookWhitePrefab, Game.SideColor.White, tiles[0,0]);
-		InstantiateRook (rookWhitePrefab, Game.SideColor.White, tiles[0,7]);
-		for (int col = 0; col < 8; col++) {
-			InstantiatePawn (pawnWhitePrefab, Game.SideColor.White, tiles[1,col]);
-		}
-
-		InstantiateKing (kingBlackPrefab, Game.SideColor.Black, tiles[7,4]);
-		InstantiateQueen (queenBlackPrefab, Game.SideColor.Black, tiles[7,3]);
-		InstantiateBishop (bishopBlackPrefab, Game.SideColor.Black, tiles[7,2]);
-		InstantiateBishop (bishopBlackPrefab, Game.SideColor.Black, tiles[7,5]);
-		InstantiateKnight (knightBlackPrefab, Game.SideColor.Black, tiles[7,1]);
-		InstantiateKnight (knightBlackPrefab, Game.SideColor.Black, tiles[7,6]);
-		InstantiateRook (rookBlackPrefab, Game.SideColor.Black, tiles[7,0]);
-		InstantiateRook (rookBlackPrefab, Game.SideColor.Black, tiles[7,7]);
-		for (int col = 0; col < 8; col++) {
-			InstantiatePawn (pawnBlackPrefab, Game.SideColor.Black, tiles[6,col]);
-		}
-	}
 
 	public Tile GetTile(int row, int column){
-		// Debug.Log ("Get Tile: " + row.ToString () + "," + column.ToString ());
-		if (row >= 0 && row < Width && column >= 0 && column < Height) {
-			return tiles [row, column];
-		} else {
-			return null;
-		}
+		return tiles [row, column];
 	}
 
-	// Get all pieces
-	public List<Piece> GetAllPieces(){
-		List<Piece> piecesList = new List<Piece>();
-		GameObject[] objects = GameObject.FindGameObjectsWithTag("Piece");
-		foreach (GameObject obj in objects){
-			piecesList.Add(obj.GetComponent<Piece> ());
-		}
-		return piecesList;
-	}
-
-	// Get all pieces from specific color
-	public List<Piece> GetAllPiecesOfColor(Game.SideColor colorType){
-//		Debug.Log ("GetAllPiecesOfColor: " + colorType.ToString());
-		List<Piece> piecesList = new List<Piece>();
-		GameObject[] objects = GameObject.FindGameObjectsWithTag("Piece");
-		foreach (GameObject obj in objects){
-			Piece p = obj.GetComponent<Piece> ();
-			if (p.color == colorType) {
-//				Debug.Log ("Pieces: " + p.name);
-//				Debug.Log ("Pieces color: " + p.color);
-				piecesList.Add (obj.GetComponent<Piece> ());
-			}
-		}
-		return piecesList;
-	}
-
-	public Tile GetKingTile(Game.SideColor sideColor){
-		List<Piece> pieces = GetAllPiecesOfColor(sideColor);
-//		Debug.Log ("GetKingTile");
-
-		foreach (Piece p in pieces){
-//			Debug.Log ("Pieces: " + p.name);
-
-			if (p is King) {
-				return p.currentTile;
+	// Get Piece GameObject from row and column
+	public Piece GetPiece(int row, int column){
+		foreach (Piece p in pieces) {
+			if (p.logic.IsActive ()) {
+				if (p.logic.currentTile.row == row && p.logic.currentTile.column == column) {
+					return p;
+				}
 			}
 		}
 		return null;
 	}
 
-	King InstantiateKing(GameObject prefab, Game.SideColor color, Tile tile){
-		King piece;
-		piece = (Instantiate (prefab) as GameObject).GetComponent<King> ();
-		GameObject pieces_child = this.transform.Find("Pieces").gameObject;
-		piece.transform.SetParent (pieces_child.transform, true);
-		piece.currentTile = tile;
-		piece.color = color;
-		if (color == Game.SideColor.White) {
-			piece.name = "king_white";
-		} else if (color == Game.SideColor.Black) {
-			piece.name = "king_black";
+	// Get Piece GameObject from tile
+	public Piece GetPiece(Tile tile){
+		foreach (Piece p in pieces) {
+			if (p.logic.IsActive ()) {
+				if (p.logic.currentTile.row == tile.logic.row && p.logic.currentTile.column == tile.logic.column) {
+					return p;
+				}
+			}
 		}
-		tile.SetPiece(piece);
-		return piece;
+		return null;
 	}
 
-	Queen InstantiateQueen(GameObject prefab, Game.SideColor color, Tile tile){
-		Queen piece;
-		piece = (Instantiate (prefab) as GameObject).GetComponent<Queen> ();
-		GameObject pieces_child = this.transform.Find("Pieces").gameObject;
-		piece.transform.SetParent (pieces_child.transform, true);
-		piece.currentTile = tile;
-		piece.color = color;
-		if (color == Game.SideColor.White) {
-			piece.name = "queen_white";
-		} else if (color == Game.SideColor.Black) {
-			piece.name = "queen_black";
+	public Piece GetPiece(TileLogic tile){
+		foreach (Piece p in pieces) {
+			if (p.logic.IsActive ()) {
+				if (p.logic.currentTile.row == tile.row && p.logic.currentTile.column == tile.column) {
+					return p;
+				}
+			}
 		}
-		tile.SetPiece(piece);
-		return piece;
+		return null;
 	}
 
-	Bishop InstantiateBishop(GameObject prefab, Game.SideColor color, Tile tile){
-		Bishop piece;
-		piece = (Instantiate (prefab) as GameObject).GetComponent<Bishop> ();
-		GameObject pieces_child = this.transform.Find("Pieces").gameObject;
-		piece.transform.SetParent (pieces_child.transform, true);
-		piece.currentTile = tile;
-		piece.color = color;
-		if (color == Game.SideColor.White) {
-			piece.name = "bishop_white";
-		} else if (color == Game.SideColor.Black) {
-			piece.name = "bishop_black";
+	void CreateBoard(){
+		GameObject tiles_child = this.transform.Find("Tiles").gameObject;
+
+		// Create all the tiles for this board.
+		for (var row = 0; row < BoardLogic.Height; row++) {
+			for (var column = 0; column < BoardLogic.Width; column++) {
+				Tile cur_tile = (Instantiate (tilePrefab) as GameObject).GetComponent<Tile> ();
+				// Put the Tile under the "Tiles" sub group in the hierarchy
+				cur_tile.transform.SetParent (tiles_child.transform, true);
+				// Connect GameObject Tile to TileLogic item in array
+				cur_tile.logic = logic.GetTile (row, column);	
+				// Update Graphics position
+				cur_tile.UpdatePosition();
+				// Debug.Log ("Generate Tile: " + cur_tile.name);
+				tiles[row, column] = cur_tile;
+			}
 		}
-		if (tile.column < 3) {
-			piece.name += "_0";
-		} else {
-			piece.name += "_1";
-		}
-		tile.SetPiece(piece);
-		return piece;
 	}
 
-	Knight InstantiateKnight(GameObject prefab, Game.SideColor color, Tile tile){
-		Knight piece;
-		piece = (Instantiate (prefab) as GameObject).GetComponent<Knight> ();
+	void CreatePieces(){
 		GameObject pieces_child = this.transform.Find("Pieces").gameObject;
-		piece.transform.SetParent (pieces_child.transform, true);
-		piece.currentTile = tile;
-		piece.color = color;
-		if (color == Game.SideColor.White) {
-			piece.name = "knight_white";
-		} else if (color == Game.SideColor.Black) {
-			piece.name = "knight_black";
-		}
-		if (tile.column < 3) {
-			piece.name += "_0";
-		} else {
-			piece.name += "_1";
-		}
-		tile.SetPiece(piece);
-		return piece;
-	}
 
-	Rook InstantiateRook(GameObject prefab, Game.SideColor color, Tile tile){
-		Rook piece;
-		piece = (Instantiate (prefab) as GameObject).GetComponent<Rook> ();
-		GameObject pieces_child = this.transform.Find("Pieces").gameObject;
-		piece.transform.SetParent (pieces_child.transform, true);
-		piece.currentTile = tile;
-		piece.color = color;
-		if (color == Game.SideColor.White) {
-			piece.name = "rook_white";
-		} else if (color == Game.SideColor.Black) {
-			piece.name = "rook_black";
+		// White pieces
+		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.King, Game.SideColor.White, pieces_child, logic.GetTile (0, 4).GetPiece ()));
+		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Queen, Game.SideColor.White, pieces_child, logic.GetTile (0, 3).GetPiece ()));
+		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Bishop, Game.SideColor.White, pieces_child, logic.GetTile (0, 2).GetPiece ()));
+		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Bishop, Game.SideColor.White, pieces_child, logic.GetTile (0, 5).GetPiece ()));
+		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Knight, Game.SideColor.White, pieces_child, logic.GetTile (0, 1).GetPiece ()));
+		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Knight, Game.SideColor.White, pieces_child, logic.GetTile (0, 6).GetPiece ()));
+		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Rook, Game.SideColor.White, pieces_child, logic.GetTile (0, 0).GetPiece ()));
+		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Rook, Game.SideColor.White, pieces_child, logic.GetTile (0, 7).GetPiece ()));
+		for (int col = 0; col < 8; col++) {
+			pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Pawn, Game.SideColor.White, pieces_child, logic.GetTile (1, col).GetPiece ()));
 		}
-		if (tile.column < 3) {
-			piece.name += "_0";
-		} else {
-			piece.name += "_1";
+		// Black Pieces
+		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.King, Game.SideColor.Black, pieces_child, logic.GetTile (7, 4).GetPiece ()));
+		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Queen, Game.SideColor.Black, pieces_child, logic.GetTile (7, 3).GetPiece ()));
+		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Bishop, Game.SideColor.Black, pieces_child, logic.GetTile (7, 2).GetPiece ()));
+		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Bishop, Game.SideColor.Black, pieces_child, logic.GetTile (7, 5).GetPiece ()));
+		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Knight, Game.SideColor.Black, pieces_child, logic.GetTile (7, 1).GetPiece ()));
+		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Knight, Game.SideColor.Black, pieces_child, logic.GetTile (7, 6).GetPiece ()));
+		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Rook, Game.SideColor.Black, pieces_child, logic.GetTile (7, 0).GetPiece ()));
+		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Rook, Game.SideColor.Black, pieces_child, logic.GetTile (7, 7).GetPiece ()));
+		for (int col = 0; col < 8; col++) {
+			pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Pawn, Game.SideColor.Black, pieces_child, logic.GetTile (6, col).GetPiece ()));
 		}
-		tile.SetPiece(piece);
-		return piece;
-	}
-
-	Pawn InstantiatePawn(GameObject prefab, Game.SideColor color, Tile tile){
-		Pawn piece;
-		piece = (Instantiate (prefab) as GameObject).GetComponent<Pawn> ();
-		GameObject pieces_child = this.transform.Find("Pieces").gameObject;
-		piece.transform.SetParent (pieces_child.transform, true);
-		piece.currentTile = tile;
-		piece.color = color;
-		if (color == Game.SideColor.White) {
-			piece.name = "pawn_white_" + tile.column.ToString();
-		} else if (color == Game.SideColor.Black) {
-			piece.name = "pawn_black_" + tile.column.ToString();
-		}
-		tile.SetPiece(piece);
-		return piece;
 	}
 
 	void OnDrawGizmos(){
@@ -244,4 +119,16 @@ public class Board : MonoBehaviour {
 		Gizmos.DrawWireCube (transform.position + offset, new Vector3(width, height, 0));
 	}
 
+	// Remove a piece when it has been taken by opponent
+	public void RemovePiece(TileLogic tile){
+		if (tile.HasPiece ()) {
+			Piece p = GetPiece(tile);
+			Debug.Log("Remove piece: " + p.logic.NameChar() + " at " + tile.Name());
+			tile.SetPiece (null);
+			p.logic.currentTile = null;
+			p.gameObject.SetActive (false);
+//			pieces.Remove (p);
+//			Destroy (p.gameObject);
+		}
+	}
 }
