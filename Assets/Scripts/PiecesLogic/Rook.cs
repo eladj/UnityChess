@@ -8,7 +8,7 @@ public class Rook : PieceLogic {
 		type = Game.PieceType.Rook;
 	}
 
-	public override List<TileLogic> GetValidMoves(){
+	public override List<TileLogic> GetMoves(){
 		List<TileLogic> validMoves = new List<TileLogic>();
 
 		// Down

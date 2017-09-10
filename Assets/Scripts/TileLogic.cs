@@ -33,7 +33,7 @@ public class TileLogic {
 	}
 
 	public bool IsInBoard(){
-		if (row > 0 && row < BoardLogic.Height && column > 0 && column < BoardLogic.Width) {
+		if (row >= 0 && row < BoardLogic.Height && column >= 0 && column < BoardLogic.Width) {
 			return true;
 		} else {
 			return false;

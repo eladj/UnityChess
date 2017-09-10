@@ -8,7 +8,7 @@ public class Pawn : PieceLogic {
 		type = Game.PieceType.Pawn;
 	}
 
-	public override List<TileLogic> GetValidMoves(){
+	public override List<TileLogic> GetMoves(){
 		List<TileLogic> validMoves = new List<TileLogic>();
 		int nextRow = 0;
 

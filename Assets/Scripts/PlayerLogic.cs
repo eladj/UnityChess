@@ -11,4 +11,9 @@ public class PlayerLogic {
 		p_name = name;
 		p_color = sideColor;
 	}
+
+	public override string ToString ()
+	{
+		return p_name + " (" + p_color.ToString() + ")";
+	}
 }

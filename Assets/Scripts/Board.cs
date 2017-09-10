@@ -74,7 +74,7 @@ public class Board : MonoBehaviour {
 				// Put the Tile under the "Tiles" sub group in the hierarchy
 				cur_tile.transform.SetParent (tiles_child.transform, true);
 				// Connect GameObject Tile to TileLogic item in array
-				cur_tile.logic = logic.GetTile (row, column);	
+				cur_tile.logic = logic.GetTileLogic (row, column);	
 				// Update Graphics position
 				cur_tile.UpdatePosition();
 				// Debug.Log ("Generate Tile: " + cur_tile.name);
@@ -87,28 +87,28 @@ public class Board : MonoBehaviour {
 		GameObject pieces_child = this.transform.Find("Pieces").gameObject;
 
 		// White pieces
-		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.King, Game.SideColor.White, pieces_child, logic.GetTile (0, 4).GetPiece ()));
-		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Queen, Game.SideColor.White, pieces_child, logic.GetTile (0, 3).GetPiece ()));
-		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Bishop, Game.SideColor.White, pieces_child, logic.GetTile (0, 2).GetPiece ()));
-		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Bishop, Game.SideColor.White, pieces_child, logic.GetTile (0, 5).GetPiece ()));
-		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Knight, Game.SideColor.White, pieces_child, logic.GetTile (0, 1).GetPiece ()));
-		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Knight, Game.SideColor.White, pieces_child, logic.GetTile (0, 6).GetPiece ()));
-		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Rook, Game.SideColor.White, pieces_child, logic.GetTile (0, 0).GetPiece ()));
-		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Rook, Game.SideColor.White, pieces_child, logic.GetTile (0, 7).GetPiece ()));
+		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.King, Game.SideColor.White, pieces_child, logic.GetTileLogic (0, 4).GetPiece ()));
+		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Queen, Game.SideColor.White, pieces_child, logic.GetTileLogic (0, 3).GetPiece ()));
+		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Bishop, Game.SideColor.White, pieces_child, logic.GetTileLogic (0, 2).GetPiece ()));
+		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Bishop, Game.SideColor.White, pieces_child, logic.GetTileLogic (0, 5).GetPiece ()));
+		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Knight, Game.SideColor.White, pieces_child, logic.GetTileLogic (0, 1).GetPiece ()));
+		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Knight, Game.SideColor.White, pieces_child, logic.GetTileLogic (0, 6).GetPiece ()));
+		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Rook, Game.SideColor.White, pieces_child, logic.GetTileLogic (0, 0).GetPiece ()));
+		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Rook, Game.SideColor.White, pieces_child, logic.GetTileLogic (0, 7).GetPiece ()));
 		for (int col = 0; col < 8; col++) {
-			pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Pawn, Game.SideColor.White, pieces_child, logic.GetTile (1, col).GetPiece ()));
+			pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Pawn, Game.SideColor.White, pieces_child, logic.GetTileLogic (1, col).GetPiece ()));
 		}
 		// Black Pieces
-		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.King, Game.SideColor.Black, pieces_child, logic.GetTile (7, 4).GetPiece ()));
-		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Queen, Game.SideColor.Black, pieces_child, logic.GetTile (7, 3).GetPiece ()));
-		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Bishop, Game.SideColor.Black, pieces_child, logic.GetTile (7, 2).GetPiece ()));
-		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Bishop, Game.SideColor.Black, pieces_child, logic.GetTile (7, 5).GetPiece ()));
-		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Knight, Game.SideColor.Black, pieces_child, logic.GetTile (7, 1).GetPiece ()));
-		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Knight, Game.SideColor.Black, pieces_child, logic.GetTile (7, 6).GetPiece ()));
-		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Rook, Game.SideColor.Black, pieces_child, logic.GetTile (7, 0).GetPiece ()));
-		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Rook, Game.SideColor.Black, pieces_child, logic.GetTile (7, 7).GetPiece ()));
+		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.King, Game.SideColor.Black, pieces_child, logic.GetTileLogic (7, 4).GetPiece ()));
+		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Queen, Game.SideColor.Black, pieces_child, logic.GetTileLogic (7, 3).GetPiece ()));
+		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Bishop, Game.SideColor.Black, pieces_child, logic.GetTileLogic (7, 2).GetPiece ()));
+		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Bishop, Game.SideColor.Black, pieces_child, logic.GetTileLogic (7, 5).GetPiece ()));
+		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Knight, Game.SideColor.Black, pieces_child, logic.GetTileLogic (7, 1).GetPiece ()));
+		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Knight, Game.SideColor.Black, pieces_child, logic.GetTileLogic (7, 6).GetPiece ()));
+		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Rook, Game.SideColor.Black, pieces_child, logic.GetTileLogic (7, 0).GetPiece ()));
+		pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Rook, Game.SideColor.Black, pieces_child, logic.GetTileLogic (7, 7).GetPiece ()));
 		for (int col = 0; col < 8; col++) {
-			pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Pawn, Game.SideColor.Black, pieces_child, logic.GetTile (6, col).GetPiece ()));
+			pieces.Add(PieceFactory.CreatePiece(Game.PieceType.Pawn, Game.SideColor.Black, pieces_child, logic.GetTileLogic (6, col).GetPiece ()));
 		}
 	}
 
@@ -123,7 +123,7 @@ public class Board : MonoBehaviour {
 	public void AddPiece(Game.PieceType pieceType, Game.SideColor pieceColor, int row, int col){
 		GameObject pieces_child = this.transform.Find("Pieces").gameObject;
 		logic.CreateNewPiece(pieceType, pieceColor, row, col);
-		pieces.Add(PieceFactory.CreatePiece(pieceType, pieceColor, pieces_child, logic.GetTile (row, col).GetPiece ()));
+		pieces.Add(PieceFactory.CreatePiece(pieceType, pieceColor, pieces_child, logic.GetTileLogic (row, col).GetPiece ()));
 	}
 
 	// Remove a piece when it has been taken by opponent

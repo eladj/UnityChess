@@ -10,7 +10,7 @@ public abstract class PieceLogic {
 	public bool hasMoved = false;	// Useful for castle in case of King and Rook
 
 	// Get all valid moves of the piece as a list of destination tiles
-	public abstract List<TileLogic> GetValidMoves();
+	public abstract List<TileLogic> GetMoves();
 
 	public PieceLogic (Game.SideColor sideColor) {
 		color = sideColor;

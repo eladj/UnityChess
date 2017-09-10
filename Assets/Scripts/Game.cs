@@ -35,7 +35,7 @@ public class Game : MonoBehaviour {
 	}
 
 	public void HandleMove(TileLogic origin, int row, int col){
-		TileLogic destination = board.logic.GetTile (row, col);
+		TileLogic destination = board.logic.GetTileLogic (row, col);
 
 		// Check if we move piece out of bounds and got empty tile
 		if (destination == null) {
@@ -46,7 +46,6 @@ public class Game : MonoBehaviour {
 		}
 
 		Move move = new Move (origin, destination);
-		Debug.Log ("Handling a move: " + move.ToString());
 		ProcessMove (move);
 	}
 
@@ -56,7 +55,7 @@ public class Game : MonoBehaviour {
 
 		// Check if we didn't changed tile
 		if (move.origin == move.destination) {
-			Debug.Log ("Same tile");
+			Debug.Log ("Illegal Move: Same tile");
 			piece.UpdatePosition();
 			return;
 		}
@@ -78,6 +77,7 @@ public class Game : MonoBehaviour {
 	// Handles making a move
 	private void MakeMove(Move move, BoardLogic _boardLogic=null, bool updateMainGame=true){
 		if (_boardLogic == null) {
+			Debug.Log ("Making a move: " + move.ToString());
 			_boardLogic = board.logic;
 		}
 //		PieceLogic piece = _board.GetPiece(move.origin);
@@ -89,15 +89,15 @@ public class Game : MonoBehaviour {
 			Debug.Log ("MakeMove: EnPassant");
 			if (this.currentTurn == Game.SideColor.White) {
 				if (updateMainGame) {
-					board.RemovePiece (_boardLogic.GetTile (move.destination.row - 1, move.destination.column));
+					board.RemovePiece (_boardLogic.GetTileLogic (move.destination.row - 1, move.destination.column));
 				} else {
-					_boardLogic.RemovePiece (_boardLogic.GetTile (move.destination.row - 1, move.destination.column));
+					_boardLogic.RemovePiece (_boardLogic.GetTileLogic (move.destination.row - 1, move.destination.column));
 				}
 			} else {
 				if (updateMainGame) {
-					board.RemovePiece (_boardLogic.GetTile (move.destination.row + 1, move.destination.column));
+					board.RemovePiece (_boardLogic.GetTileLogic (move.destination.row + 1, move.destination.column));
 				} else {
-					_boardLogic.RemovePiece (_boardLogic.GetTile (move.destination.row + 1, move.destination.column));
+					_boardLogic.RemovePiece (_boardLogic.GetTileLogic (move.destination.row + 1, move.destination.column));
 				}
 			}
 		}
@@ -111,23 +111,12 @@ public class Game : MonoBehaviour {
 			}
 		}
 			
-//		// Remove this piece reference from previous tile
-//		move.origin.SetPiece(null);
-//
-//		// Update this piece tile to the new one
-//		piece.currentTile = move.destination;
-//
-//		// Update that this piece has moved (for castle future check)
-//		piece.hasMoved = true;
-//		// Update the tile with the new piece
-//		move.destination.SetPiece(piece);
 		_boardLogic.MovePiece(move);
 
 		// Check if Pawn reached last row and promote it
 		if (piece is Pawn) {
 			if ((piece.color == Game.SideColor.White && move.destination.row == BoardLogic.Height - 1) ||
 				(piece.color == Game.SideColor.Black && move.destination.row == 0)){
-				Debug.Log("Pawn reached the end!!!");
 				move.piecePromotedType = Game.PieceType.Queen;
 				move.type = Game.MoveType.Promote;
 				// Remove pawn and add new piece
@@ -144,11 +133,11 @@ public class Game : MonoBehaviour {
 		if (move.type == Game.MoveType.CastleShort || move.type == Game.MoveType.CastleLong) {
 			Move moveRook = null;
 			if (move.type == Game.MoveType.CastleShort) {
-				moveRook = new Move (_boardLogic.GetTile (move.destination.row, move.destination.column + 1),
-					_boardLogic.GetTile (move.destination.row, move.destination.column - 1));
+				moveRook = new Move (_boardLogic.GetTileLogic (move.destination.row, move.destination.column + 1),
+					_boardLogic.GetTileLogic (move.destination.row, move.destination.column - 1));
 			} else if (move.type == Game.MoveType.CastleLong){
-				moveRook = new Move (_boardLogic.GetTile (move.destination.row, move.destination.column - 2),
-					_boardLogic.GetTile (move.destination.row, move.destination.column + 1));
+				moveRook = new Move (_boardLogic.GetTileLogic (move.destination.row, move.destination.column - 2),
+					_boardLogic.GetTileLogic (move.destination.row, move.destination.column + 1));
 			}
 			if (updateMainGame) {
 				board.MovePiece (moveRook);
@@ -186,7 +175,7 @@ public class Game : MonoBehaviour {
 		}
 
 		// Check if the target tile is valid for this kind of piece
-		List<TileLogic> validMovesForPiece = piece.logic.GetValidMoves ();
+		List<TileLogic> validMovesForPiece = piece.logic.GetMoves ();
 		bool contains = false;
 		foreach (TileLogic t in validMovesForPiece){
 			if (t.row == move.destination.row && t.column == move.destination.column) {
@@ -200,11 +189,9 @@ public class Game : MonoBehaviour {
 		}
 
 		// Check that we dont go through pieces
-		Debug.Log ("Route Check");
 		List<TileLogic> route = move.GetRoute();
 		foreach (TileLogic t in route) {
-			Debug.Log (t.Name());
-			if (board.logic.GetTile(t.row, t.column).HasPiece()) {
+			if (board.logic.GetTileLogic(t.row, t.column).HasPiece()) {
 				Debug.Log ("Illegal move: Cannot move through pieces");
 				return false;
 			}
@@ -222,8 +209,6 @@ public class Game : MonoBehaviour {
 						Mathf.Abs (lastMove.origin.row - lastMove.destination.row) == 2)) {
 						Debug.Log ("Illegal move: Pawn cannot move diagonally to an empty tile (excluding EnPassant)");
 						return false;
-					} else {
-						Debug.Log ("EnPassant !");
 					}
 				}
 			}
@@ -240,11 +225,10 @@ public class Game : MonoBehaviour {
 		// Check that the king is not exposed to check after this move
 		// For this we need to copy current board, make the move and check if it is valid
 		BoardLogic boardCopy = board.logic.Copy();
-		Move moveCopy = new Move (boardCopy.GetTile(move.origin.row, move.origin.column),
-			boardCopy.GetTile(move.destination.row, move.destination.column), false);
+		Move moveCopy = new Move (boardCopy.GetTileLogic(move.origin.row, move.origin.column),
+			boardCopy.GetTileLogic(move.destination.row, move.destination.column), false);
 		MakeMove (moveCopy, boardCopy, false);
 		TileLogic kingTile = boardCopy.GetKingTile (this.currentTurn);
-		Debug.Log ("Kings tile: " + kingTile.Name());
 		if (boardCopy.isTileChecked (kingTile, this.currentTurn)) {
 			Debug.Log ("Illegal move: " + this.currentTurn.ToString() + " King is checked");
 			return false;
@@ -275,7 +259,7 @@ public class Game : MonoBehaviour {
 				// Check the relevant rook didn't moved
 				bool flagRookMoved = false;
 				if (move.type == Game.MoveType.CastleShort) {
-					PieceLogic p = board.logic.GetPiece (move.destination.row, move.destination.column + 1);
+					PieceLogic p = board.logic.GetPieceLogic (move.destination.row, move.destination.column + 1);
 					if (p == null) {
 						flagRookMoved = true;
 					} else {
@@ -288,7 +272,7 @@ public class Game : MonoBehaviour {
 					}
 				}
 				if (move.type == Game.MoveType.CastleLong) {
-					PieceLogic p = board.logic.GetPiece (move.destination.row, move.destination.column - 2);
+					PieceLogic p = board.logic.GetPieceLogic (move.destination.row, move.destination.column - 2);
 					if (p == null) {
 						flagRookMoved = true;
 					} else {
@@ -309,6 +293,14 @@ public class Game : MonoBehaviour {
 
 		return true;
 	}
+
+//	private bool IsCheckmated(Game.SideColor color){
+//		List<PieceLogic> piecesList = board.logic.GetAllPiecesOfColor (color);
+//		foreach (PieceLogic p in piecesList) {
+//			p.GetValidMoves ();
+//		}
+//		return true;
+//	}
 
 	private void AdvanceTurn(){
 		if (currentTurn == Game.SideColor.White) {

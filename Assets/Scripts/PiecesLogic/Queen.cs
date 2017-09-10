@@ -8,7 +8,7 @@ public class Queen : PieceLogic {
 		type = Game.PieceType.Queen;
 	}
 
-	public override List<TileLogic> GetValidMoves(){
+	public override List<TileLogic> GetMoves(){
 		List<TileLogic> validMoves = new List<TileLogic>();
 
 		// Up-Left

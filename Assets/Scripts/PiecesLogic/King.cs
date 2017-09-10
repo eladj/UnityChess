@@ -8,7 +8,7 @@ public class King : PieceLogic {
 		type = Game.PieceType.King;
 	}
 
-	public override List<TileLogic> GetValidMoves(){
+	public override List<TileLogic> GetMoves(){
 		List<TileLogic> validMoves = new List<TileLogic>();
 
 		// Standard moves

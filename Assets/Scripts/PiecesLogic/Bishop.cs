@@ -8,7 +8,7 @@ public class Bishop : PieceLogic {
 		type = Game.PieceType.Bishop;
 	}
 
-	public override List<TileLogic> GetValidMoves(){
+	public override List<TileLogic> GetMoves(){
 		List<TileLogic> validMoves = new List<TileLogic>();
 
 		// Up-Left

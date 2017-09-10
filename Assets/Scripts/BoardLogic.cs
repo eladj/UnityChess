@@ -30,12 +30,12 @@ public class BoardLogic {
 	}
 
 	// Get piece from row and column
-	public PieceLogic GetPiece(int row, int column){
+	public PieceLogic GetPieceLogic(int row, int column){
 		return tiles [row, column].GetPiece ();
 	}
 
 	// Get piece from tile
-	public PieceLogic GetPiece(TileLogic tileLogic){
+	public PieceLogic GetPieceLogic(TileLogic tileLogic){
 		return tiles [tileLogic.row, tileLogic.column].GetPiece ();
 	}
 
@@ -70,7 +70,7 @@ public class BoardLogic {
 		}
 	}
 
-	public TileLogic GetTile(int row, int column){
+	public TileLogic GetTileLogic(int row, int column){
 		// Debug.Log ("Get Tile: " + row.ToString () + "," + column.ToString ());
 		if (row >= 0 && row < Width && column >= 0 && column < Height) {
 			return tiles [row, column];
@@ -81,7 +81,7 @@ public class BoardLogic {
 
 	// Is tile has the piece type and color
 	public bool isTileHasPiece(int row, int column, Game.PieceType pieceType, Game.SideColor pieceColor){
-		TileLogic tile = GetTile (row, column);
+		TileLogic tile = GetTileLogic (row, column);
 		if (tile != null) {
 			if (tile.HasPieceOfType(pieceType, pieceColor)){
 				return true;
@@ -92,7 +92,7 @@ public class BoardLogic {
 
 	// Is tile has any of the pieces type in the list and in the correct color
 	public bool isTileHasPiece(int row, int column, List<Game.PieceType> pieceTypeList, Game.SideColor pieceColor){
-		TileLogic tile = GetTile (row, column);
+		TileLogic tile = GetTileLogic (row, column);
 		if (tile != null) {
 			foreach (Game.PieceType p in pieceTypeList) {
 				if (tile.HasPieceOfType(p, pieceColor)){
@@ -160,7 +160,7 @@ public class BoardLogic {
 
 		// Up
 		for (int row = tile.row + 1; row < BoardLogic.Height; row++) {
-			t = GetTile (row, tile.column);
+			t = GetTileLogic (row, tile.column);
 			if (t.HasPiece()) {
 				p = t.GetPiece ();
 				if (straightPieces.Contains(p.type) && p.color == opponenetColor){
@@ -172,7 +172,7 @@ public class BoardLogic {
 
 		// Down
 		for (int row = tile.row - 1; row >= 0; row--) {
-			t = GetTile (row, tile.column);
+			t = GetTileLogic (row, tile.column);
 			if (t.HasPiece()) {
 				p = t.GetPiece ();
 				if (straightPieces.Contains(p.type) && p.color == opponenetColor){
@@ -184,7 +184,7 @@ public class BoardLogic {
 
 		// Right
 		for (int col = tile.column + 1; col < BoardLogic.Width; col++) {
-			t = GetTile (tile.row, col);
+			t = GetTileLogic (tile.row, col);
 			if (t.HasPiece()) {
 				p = t.GetPiece ();
 				if (straightPieces.Contains(p.type) && p.color == opponenetColor){
@@ -196,7 +196,7 @@ public class BoardLogic {
 
 		// Left
 		for (int col = tile.column - 1; col >= 0; col--) {
-			t = GetTile (tile.row, col);
+			t = GetTileLogic (tile.row, col);
 			if (t.HasPiece()) {
 				p = t.GetPiece ();
 				if (straightPieces.Contains(p.type) && p.color == opponenetColor){
@@ -208,7 +208,7 @@ public class BoardLogic {
 
 		// Diagonal up-right
 		for (int row = tile.row + 1, col = tile.column + 1; row < BoardLogic.Height && col < BoardLogic.Width; row++, col++) {
-			t = GetTile (row, col);
+			t = GetTileLogic (row, col);
 			if (t.HasPiece()) {
 				p = t.GetPiece ();
 				if (diagonalPieces.Contains(p.type) && p.color == opponenetColor){
@@ -220,7 +220,7 @@ public class BoardLogic {
 
 		// Diagonal up-left
 		for (int row = tile.row + 1, col = tile.column - 1; row < BoardLogic.Height && col >= 0; row++, col--) {
-			t = GetTile (row, col);
+			t = GetTileLogic (row, col);
 			if (t.HasPiece()) {
 				p = t.GetPiece ();
 				if (diagonalPieces.Contains(p.type) && p.color == opponenetColor){
@@ -232,7 +232,7 @@ public class BoardLogic {
 
 		// Diagonal down-right
 		for (int row = tile.row - 1, col = tile.column + 1; row >= 0 && col < BoardLogic.Width; row--, col++) {
-			t = GetTile (row, col);
+			t = GetTileLogic (row, col);
 			if (t.HasPiece()) {
 				p = t.GetPiece ();
 				if (diagonalPieces.Contains(p.type) && p.color == opponenetColor){
@@ -244,7 +244,7 @@ public class BoardLogic {
 
 		// Diagonal down-left
 		for (int row = tile.row - 1, col = tile.column - 1; row >= 0 && col >= 0; row--, col--) {
-			t = GetTile (row, col);
+			t = GetTileLogic (row, col);
 			if (t.HasPiece()) {
 				p = t.GetPiece ();
 				if (diagonalPieces.Contains(p.type) && p.color == opponenetColor){
@@ -275,7 +275,7 @@ public class BoardLogic {
 		if (isTileHasPiece(tile.row - 1, tile.column - 2, Game.PieceType.Knight, opponenetColor)) return true;
 
 		// Check King
-		if (GetKingTile (opponenetColor).GetPiece ().GetValidMoves ().Contains (tile)) {
+		if (GetKingTile (opponenetColor).GetPiece ().GetMoves ().Contains (tile)) {
 			return true;
 		}
 
@@ -285,7 +285,7 @@ public class BoardLogic {
 	// Remove a piece (only logical representation of piece - not the GameObject)
 	public void RemovePiece(TileLogic tile){
 		if (tile.HasPiece ()) {
-			PieceLogic p = GetPiece(tile);
+			PieceLogic p = GetPieceLogic(tile);
 			tile.SetPiece (null);
 			p.currentTile = null;
 		}
